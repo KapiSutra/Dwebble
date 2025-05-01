@@ -1,5 +1,6 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
+using System.IO;
 using UnrealBuildTool;
 
 public class Dwebble : ModuleRules
@@ -7,6 +8,13 @@ public class Dwebble : ModuleRules
 	public Dwebble(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+		// Type = ModuleType.CPlusPlus;
+
+		PublicAdditionalLibraries.AddRange(
+		[
+			Path.Combine(PluginDirectory, @"target\release\dwebble.lib")
+		]);
+
 
 		PublicIncludePaths.AddRange(
 			new string[]

@@ -1,6 +1,17 @@
 [package]
-name = "Dwebble"
+name = "dwebble"
 version = "0.1.0"
 edition = "2024"
 
+[build-dependencies]
+#cbindgen = "0.28.0"
+cxx-build = "1.0.158"
+
 [dependencies]
+cxx = { version = "1.0.158" }
+cxx-async = "0.1.2"
+tokio = "1.44.2"
+tonic = "0.13.0"
+
+[lib]
+crate-type = ["staticlib"]
