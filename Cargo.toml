@@ -8,10 +8,15 @@ edition = "2024"
 cxx-build = "1.0.158"
 
 [dependencies]
-cxx = { version = "1.0.158" }
-tokio = "1.44.2"
-tonic = "0.13.0"
+cxx = { version = "*" }
+tokio = { version = "*" }
+tonic = { version = "*" }
 #cxx-async = { path = "./Modules/cxx-async/cxx-async" }
 
 [lib]
-crate-type = ["staticlib"]
+crate-type = ["cdylib", "staticlib"]
+path = "src/lib.rs"
+
+[lints.clippy]
+implicit_return = "deny"
+needless_return = "allow"

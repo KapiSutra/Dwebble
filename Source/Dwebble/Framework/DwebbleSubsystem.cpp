@@ -2,11 +2,11 @@
 
 
 #include "DwebbleSubsystem.h"
-// #include "Dwebble/Bindings.h"
+#include "dwebble/src/test.rs.h"
 
 void UDwebbleSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
     Super::Initialize(Collection);
 
-    // UE_LOG(LogTemp, Warning, TEXT("UDwebbleSubsystem::Initialize with %d"), Dwebble::add_5(1));
+    UE_LOG(LogTemp, Warning, TEXT("UDwebbleSubsystem::Initialize with %d"), dwebble::test());
 }

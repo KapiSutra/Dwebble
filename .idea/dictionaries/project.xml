@@ -2,6 +2,7 @@
   <dictionary name="project">
     <words>
       <w>cbindgen</w>
+      <w>cxxbridge</w>
       <w>dwebble</w>
       <w>tarnishablec</w>
       <w>uclass</w>

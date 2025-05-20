@@ -8,18 +8,21 @@ public class Dwebble : ModuleRules
 	public Dwebble(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		// Type = ModuleType.CPlusPlus;
+		Type = ModuleType.CPlusPlus;
 
 		PublicAdditionalLibraries.AddRange(
 		[
-			Path.Combine(PluginDirectory, @"target\release\dwebble.lib")
+			// Path.Combine(PluginDirectory, @"Bindings\dwebble.lib"),
 		]);
+
+		PublicPreBuildLibraries.Add(Path.Combine(PluginDirectory, @"Bindings\dwebble.lib"));
 
 
 		PublicIncludePaths.AddRange(
 			new string[]
 			{
 				// ... add public include paths required here ...
+				Path.Combine(PluginDirectory, @"target\cxxbridge")
 			}
 		);
 
