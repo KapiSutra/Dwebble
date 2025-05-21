@@ -5,7 +5,7 @@ edition = "2024"
 
 [build-dependencies]
 #cbindgen = "0.28.0"
-cxx-build = "1.0.158"
+cxx-build = "*"
 
 [dependencies]
 cxx = { version = "*" }
@@ -14,7 +14,7 @@ tonic = { version = "*" }
 #cxx-async = { path = "./Modules/cxx-async/cxx-async" }
 
 [lib]
-crate-type = ["cdylib", "staticlib"]
+crate-type = ["staticlib"]
 path = "src/lib.rs"
 
 [lints.clippy]
