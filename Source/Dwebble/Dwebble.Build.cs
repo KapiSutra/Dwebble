@@ -12,7 +12,8 @@ public class Dwebble : ModuleRules
 
 		PublicAdditionalLibraries.AddRange(
 		[
-			Path.Combine(PluginDirectory, @"Bindings\dwebble.lib"),
+			// Path.Combine(PluginDirectory, @"Bindings\dwebble.lib"),
+			// Path.Combine(PluginDirectory, @"target\debug\dwebble.lib"),
 		]);
 
 		// PublicPreBuildLibraries.Add(Path.Combine(PluginDirectory, @"Bindings\dwebble.lib"));
@@ -22,7 +23,8 @@ public class Dwebble : ModuleRules
 			new string[]
 			{
 				// ... add public include paths required here ...
-				Path.Combine(PluginDirectory, @"target\cxxbridge")
+				// Path.Combine(PluginDirectory, @"target\cxxbridge"),
+				// Path.Combine(PluginDirectory, "Bindgens"),
 			}
 		);
 

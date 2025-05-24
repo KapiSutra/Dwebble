@@ -3,6 +3,8 @@ pub mod ffi {
     extern "Rust" {
         pub fn test() -> u8;
     }
+
+    unsafe extern "C++" {}
 }
 
 pub fn test() -> u8 {

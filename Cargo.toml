@@ -4,18 +4,18 @@ version = "0.1.0"
 edition = "2024"
 
 [build-dependencies]
-#cbindgen = "0.28.0"
+cbindgen = "0.28.0"
 cxx-build = "*"
 
 [dependencies]
-cxx = { version = "*" }
+cxx = { version = "*", features = ["c++20"] }
 tokio = { version = "*" }
 tonic = { version = "*" }
 #cxx-async = { path = "./Modules/cxx-async/cxx-async" }
 
 [lib]
 crate-type = ["staticlib"]
-path = "src/lib.rs"
+path = "src/ffi.rs"
 
 [lints.clippy]
 implicit_return = "deny"
