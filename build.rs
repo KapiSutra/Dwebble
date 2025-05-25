@@ -12,19 +12,19 @@ fn main() {
     //     .write_to_file("Bindgens/Bindings.h");
 
     // https://github.com/dtolnay/cxx/issues/880#issuecomment-2521375384
-  
+
     // Don't link the default CRT
-    println!("cargo::rustc-link-arg=/nodefaultlib:msvcrt");
+    // println!("cargo::rustc-link-arg=/nodefaultlib:msvcrt");
     // Link the debug CRT instead
-    println!("cargo::rustc-link-arg=/defaultlib:msvcrtd");
+    // println!("cargo::rustc-link-arg=/defaultlib:msvcrtd");
 
-    let out_lib_dir = "Bindings";
-    std::fs::remove_dir_all(out_lib_dir).unwrap();
+    // let out_lib_dir = "Bindings";
+    // std::fs::remove_dir_all(out_lib_dir).unwrap();
 
-    cxx_build::bridge("src/ffi.rs")
-        .out_dir(out_lib_dir)
-        .std("c++20")
-        .compile("dwebble");
+    // cxx_build::bridge("src/ffi.rs")
+    //     .out_dir(out_lib_dir)
+    //     .std("c++20")
+    //     .compile("dwebble");
 
     println!("cargo:rerun-if-changed=src/ffi.rs");
     println!("cargo:rerun-if-changed=build.rs");
