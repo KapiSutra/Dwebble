@@ -1,6 +1,7 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 using System.IO;
+using EpicGames.Core;
 using UnrealBuildTool;
 
 public class Dwebble : ModuleRules
@@ -12,21 +13,23 @@ public class Dwebble : ModuleRules
 
 		PublicAdditionalLibraries.AddRange(
 		[
-			// Path.Combine(PluginDirectory, @"Bindings\dwebble.lib"),
+			Path.Combine(PluginDirectory, @"Bindings\dwebble.lib"),
 			// Path.Combine(PluginDirectory, @"target\debug\dwebble.lib"),
 		]);
-
-		// PublicPreBuildLibraries.Add(Path.Combine(PluginDirectory, @"Bindings\dwebble.lib"));
 
 
 		PublicIncludePaths.AddRange(
 			new string[]
 			{
 				// ... add public include paths required here ...
-				// Path.Combine(PluginDirectory, @"target\cxxbridge"),
+				Path.Combine(PluginDirectory, @"target\cxxbridge"),
 				// Path.Combine(PluginDirectory, "Bindgens"),
 			}
 		);
+
+		if (Target.WindowsPlatform.Compiler.IsMSVC())
+		{
+		}
 
 
 		PrivateIncludePaths.AddRange(

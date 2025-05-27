@@ -1,5 +1,4 @@
 ﻿// extern crate cbindgen;
-extern crate cxx_build;
 
 fn main() {
     // cbindgen::Builder::new()
@@ -13,19 +12,27 @@ fn main() {
 
     // https://github.com/dtolnay/cxx/issues/880#issuecomment-2521375384
 
-    // Don't link the default CRT
-    // println!("cargo::rustc-link-arg=/nodefaultlib:msvcrt");
-    // Link the debug CRT instead
-    // println!("cargo::rustc-link-arg=/defaultlib:msvcrtd");
+    if std::env::var("TARGET").is_ok_and(|s| return s.contains("windows-msvc")) {
+        // MSVC compiler suite
 
-    // let out_lib_dir = "Bindings";
-    // std::fs::remove_dir_all(out_lib_dir).unwrap();
+        if Ok("debug".to_owned()) == std::env::var("PROFILE") {
+            // debug runtime flag is set
 
-    // cxx_build::bridge("src/ffi.rs")
-    //     .out_dir(out_lib_dir)
-    //     .std("c++20")
-    //     .compile("dwebble");
+            // Don't link the default CRT
+            println!("cargo::rustc-link-arg=/NODEFAULTLIB:LIBCMT");
+            // Link the debug CRT instead
+            println!("cargo::rustc-link-arg=/DEFAULTLIB:LIBCMTD");
+        }
+    }
+
+    let out_lib_dir = "Bindings";
+    std::fs::remove_dir_all(out_lib_dir).unwrap();
+
+    cxx_build::bridge("src/ffi.rs")
+        .out_dir(out_lib_dir)
+        .std("c++20")
+        .compile("dwebble");
 
     println!("cargo:rerun-if-changed=src/ffi.rs");
-    println!("cargo:rerun-if-changed=build.rs");
+    // println!("cargo:rerun-if-changed=build.rs");
 }

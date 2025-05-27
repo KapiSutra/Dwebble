@@ -8,10 +8,10 @@ cbindgen = "0.28.0"
 cxx-build = "*"
 
 [dependencies]
-cxx = { version = "*", features = ["c++20"] }
+cxx = { version = "*", features = ["std"] }
 tokio = { version = "*" }
 tonic = { version = "*" }
-#cxx-async = { path = "./Modules/cxx-async/cxx-async" }
+#cxx-async = {version = "*"}
 
 [lib]
 crate-type = ["staticlib"]
@@ -20,3 +20,6 @@ path = "src/ffi.rs"
 [lints.clippy]
 implicit_return = "deny"
 needless_return = "allow"
+
+[profile.dev.build-override]
+debug = true
