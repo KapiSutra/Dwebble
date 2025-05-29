@@ -14,7 +14,7 @@ tonic = { version = "*" }
 #cxx-async = {version = "*"}
 
 [lib]
-crate-type = ["staticlib"]
+crate-type = ["cdylib"]
 path = "src/ffi.rs"
 
 [lints.clippy]

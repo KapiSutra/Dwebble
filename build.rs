@@ -19,9 +19,9 @@ fn main() {
             // debug runtime flag is set
 
             // Don't link the default CRT
-            println!("cargo::rustc-link-arg=/NODEFAULTLIB:LIBCMT");
+            println!("cargo::rustc-link-arg=/nodefaultlib:msvcrt");
             // Link the debug CRT instead
-            println!("cargo::rustc-link-arg=/DEFAULTLIB:LIBCMTD");
+            println!("cargo::rustc-link-arg=/defaultlib:msvcrtd");
         }
     }
 
@@ -34,5 +34,4 @@ fn main() {
         .compile("dwebble");
 
     println!("cargo:rerun-if-changed=src/ffi.rs");
-    // println!("cargo:rerun-if-changed=build.rs");
 }
