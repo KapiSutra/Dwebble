@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdarg>
 #include <cstdint>
 #include <cstdlib>
@@ -8,7 +10,11 @@ namespace dwebble {
 
 extern "C" {
 
-void fill_uuid_v7_into_buffer(void *buffer);
+/// Frees memory allocated by Rust for strings passed to C++.
+/// This MUST be called from C++ when the string is no longer needed.
+void free_rust_string(char *s);
+
+char *fill_uuid_v7_into_guid(void *buffer);
 
 }  // extern "C"
 
