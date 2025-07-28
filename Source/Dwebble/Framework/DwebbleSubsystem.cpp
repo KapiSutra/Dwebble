@@ -2,12 +2,18 @@
 
 
 #include "DwebbleSubsystem.h"
-// #include "Bindings.h"
+#include "Bindings.h"
 // #include "dwebble/src/ffi.rs.h"
 
 void UDwebbleSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
     Super::Initialize(Collection);
+
+    FGuid NewGuid;
+    void* GuidDataPtr = &NewGuid;
+    dwebble::fill_uuid_v7_into_buffer(GuidDataPtr);
+
+    UE_LOG(LogTemp, Warning, TEXT("UDwebbleSubsystem::Initialize with uuid %s"), *NewGuid.ToString());
 
     // UE_LOG(LogTemp, Warning, TEXT("UDwebbleSubsystem::Initialize with %d"), dwebble::test() + 1);
     // UE_LOG(LogTemp, Warning, TEXT("UDwebbleSubsystem::Initialize with %d"), dwebble::test());

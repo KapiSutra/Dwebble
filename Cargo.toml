@@ -4,17 +4,19 @@ version = "0.1.0"
 edition = "2024"
 
 [build-dependencies]
-cbindgen = "0.28.0"
+cbindgen = "*"
 cxx-build = "*"
 
 [dependencies]
 cxx = { version = "*", features = ["std"] }
 tokio = { version = "*" }
 tonic = { version = "*" }
+
+uuid = { version = "*", features = ["v7"] }
 #cxx-async = {version = "*"}
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["staticlib"]
 path = "src/ffi.rs"
 
 [lints.clippy]
