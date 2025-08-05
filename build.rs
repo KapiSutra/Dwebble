@@ -1,16 +1,14 @@
-﻿// extern crate cbindgen;
-
-fn main() {
+﻿fn main() {
     cbindgen::Builder::new()
         .with_language(cbindgen::Language::Cxx)
-        .with_namespaces(&["dwebble"])
+        .with_namespaces(&["dwebble_rs"])
         .with_crate(".")
         .with_cpp_compat(true)
         .with_std_types(true)
         .with_pragma_once(true)
         .generate()
         .expect("cbindgen error")
-        .write_to_file("Bindgens/Bindings.h");
+        .write_to_file("Bindgens/dwebble_rs.h");
 
     // https://github.com/dtolnay/cxx/issues/880#issuecomment-2521375384
 

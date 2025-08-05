@@ -11,18 +11,12 @@ public class Dwebble : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		// Type = ModuleType.CPlusPlus;
 
-		PublicAdditionalLibraries.AddRange(
-		[
-			// Path.Combine(PluginDirectory, @"Bindings\dwebble.lib"),
-			Path.Combine(PluginDirectory, @"target\debug\dwebble.lib"),
-		]);
+		PublicAdditionalLibraries.Add(
+			Path.Combine(PluginDirectory, @"target\x86_64-pc-windows-msvc\release\dwebble.lib")
+		);
 
-		PublicIncludePaths.AddRange(
-			[
-				// ... add public include paths required here ...
-				// Path.Combine(PluginDirectory, @"target\cxxbridge"),
-				Path.Combine(PluginDirectory, "Bindgens")
-			]
+		PublicIncludePaths.Add(
+			Path.Combine(PluginDirectory, "Bindgens")
 		);
 
 		if (Target.WindowsPlatform.Compiler.IsMSVC())
@@ -30,18 +24,15 @@ public class Dwebble : ModuleRules
 			PublicSystemLibraries.Add("kernel32.lib");
 			PublicSystemLibraries.Add("advapi32.lib");
 			PublicSystemLibraries.Add("bcrypt.lib");
-			PublicSystemLibraries.Add("kernel32.lib");
 			PublicSystemLibraries.Add("ntdll.lib");
 			PublicSystemLibraries.Add("userenv.lib");
 			PublicSystemLibraries.Add("ws2_32.lib");
-			PublicSystemLibraries.Add("kernel32.lib");
-			PublicSystemLibraries.Add("ws2_32.lib");
-			PublicSystemLibraries.Add("kernel32.lib");
-			PublicSystemLibraries.Add("ntdll.lib");
-			PublicSystemLibraries.Add("kernel32.lib");
 			PublicSystemLibraries.Add("msvcrt.lib");
 		}
 
+        
+        
+        
 
 		PrivateIncludePaths.AddRange(
 			new string[]
