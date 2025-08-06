@@ -33,6 +33,6 @@
     //     .std("c++20")
     //     .compile("dwebble");
 
-    println!("cargo:rerun-if-changed=src/ffi.rs");
+    println!("cargo:rerun-if-changed=src");
     println!("cargo:rerun-if-changed=build.rs");
 }
