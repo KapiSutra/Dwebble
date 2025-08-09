@@ -19,5 +19,10 @@
       "Type": "Runtime",
       "LoadingPhase": "Default"
     }
-  ]
+  ],
+  "PreBuildSteps": {
+    "Win64": [
+      "$(PluginDir)/PreBuildSteps.bat"
+    ]
+  }
 }

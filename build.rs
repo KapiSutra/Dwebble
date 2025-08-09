@@ -1,38 +1,43 @@
 ﻿fn main() {
-    cbindgen::Builder::new()
-        .with_language(cbindgen::Language::Cxx)
-        .with_namespaces(&["dwebble_rs"])
-        .with_crate(".")
-        .with_cpp_compat(true)
-        .with_std_types(true)
-        .with_pragma_once(true)
-        .generate()
-        .expect("cbindgen error")
-        .write_to_file("Bindgens/dwebble_rs.h");
+    // let cbindgen_out_dir = "cbindgen";
+    // std::fs::remove_dir_all(cbindgen_out_dir)
+    //     .and_then(|_| std::fs::create_dir(cbindgen_out_dir))
+    //     .unwrap_or_default();
+    //
+    // cbindgen::Builder::new()
+    //     .with_language(cbindgen::Language::Cxx)
+    //     .with_namespaces(&["dwebble_rs"])
+    //     .with_crate(".")
+    //     .with_cpp_compat(true)
+    //     .with_std_types(true)
+    //     .with_pragma_once(true)
+    //     .generate()
+    //     .expect("cbindgen error")
+    //     .write_to_file(std::path::PathBuf::from(cbindgen_out_dir).join("dwebble_rs.h"));
 
-    // https://github.com/dtolnay/cxx/issues/880#issuecomment-2521375384
+    let cxx_lib_dir = "cxx";
+    std::fs::remove_dir_all(cxx_lib_dir)
+        .and_then(|_| std::fs::create_dir(cxx_lib_dir))
+        .unwrap_or_default();
 
-    // if std::env::var("TARGET").is_ok_and(|s| return s.contains("windows-msvc")) {
-    //     // MSVC compiler suite
-    //
-    //     if Ok("debug".to_owned()) == std::env::var("PROFILE") {
-    //         // debug runtime flag is set
-    //
-    //         // Don't link the default CRT
-    //         println!("cargo::rustc-link-arg=/nodefaultlib:msvcrt");
-    //         // Link the debug CRT instead
-    //         println!("cargo::rustc-link-arg=/defaultlib:msvcrtd");
-    //     }
-    // }
-    //
-    // let out_lib_dir = "Bindings";
-    // std::fs::remove_dir_all(out_lib_dir).unwrap();
-    //
-    // cxx_build::bridge("src/ffi.rs")
-    //     .out_dir(out_lib_dir)
-    //     .std("c++20")
-    //     .compile("dwebble");
+    cxx_build::bridge("ffi/index.rs")
+        // .out_dir(cxx_lib_dir)
+        .includes(["src"])
+        // .file("target/x86_64-pc-windows-msvc/cxxbridge/dwebble/ffi/index.rs.cc")
+        .std("c++20")
+        .compile("dwebble_cxx");
 
     println!("cargo:rerun-if-changed=src");
+    println!("cargo:rerun-if-changed=ffi");
     println!("cargo:rerun-if-changed=build.rs");
+
+    println!("cargo:rerun-if-env-changed=PROFILE=release");
+
+    println!("cargo:rustc-link-lib=kernel32");
+    println!("cargo:rustc-link-lib=advapi32");
+    println!("cargo:rustc-link-lib=bcrypt");
+    println!("cargo:rustc-link-lib=ntdll");
+    println!("cargo:rustc-link-lib=userenv");
+    println!("cargo:rustc-link-lib=ws2_32");
+    println!("cargo:rustc-link-lib=msvcrt");
 }

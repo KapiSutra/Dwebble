@@ -12,15 +12,10 @@ public class Dwebble : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		// Type = ModuleType.CPlusPlus;
 
-		PublicAdditionalLibraries.Add(
-			Path.Combine(PluginDirectory, @"target\x86_64-pc-windows-msvc\release\dwebble.lib")
-		);
+		var CargoTarget = GetCargoTargetTriple();
 
-		PublicIncludePaths.Add(
-			Path.Combine(PluginDirectory, "Bindgens")
-		);
-
-		if (Target.WindowsPlatform.Compiler.IsMSVC())
+		// if (Target.WindowsPlatform.Compiler.IsMSVC())
+		if (Target.Platform == UnrealTargetPlatform.Win64)
 		{
 			PublicSystemLibraries.Add("kernel32.lib");
 			PublicSystemLibraries.Add("advapi32.lib");
@@ -31,17 +26,48 @@ public class Dwebble : ModuleRules
 			PublicSystemLibraries.Add("msvcrt.lib");
 		}
 
+		var LibFileName = GetLibFileName();
+
+		PublicAdditionalLibraries.Add(
+			Path.Combine(PluginDirectory, @$"target\{CargoTarget}\release\{LibFileName}")
+		);
+
+		# region cbindgen
+		
+		// PublicIncludePaths.Add(
+		// 	Path.Combine(PluginDirectory, "cbindgen")
+		// );
+
+		# endregion
+
+		# region cxx
+
+		// PublicAdditionalLibraries.Add(
+		// 	Path.Combine(PluginDirectory, @$"cxx\dwebble_cxx.lib")
+		// );
+
+		PublicIncludePaths.Add(
+			Path.Combine(PluginDirectory, @$"target\{CargoTarget}\cxxbridge")
+			// Path.Combine(PluginDirectory, @$"target\cxxbridge")
+		);
+
+		# endregion
+
 		const string Command = "cargo";
-		const string Arguments = "build --release --target x86_64-pc-windows-msvc";
+		var Arguments = $"build --release --target {CargoTarget}";
 
 		Log.TraceInformationOnce("Dwebble Plugin: running Rust Cargo Build...");
 
-		var ProcStartInfo = new ProcessStartInfo(Command, Arguments)
+		Log.TraceInformationOnce($"{Command} {Arguments}");
+
+		var ProcStartInfo = new ProcessStartInfo()
 		{
-			WorkingDirectory = PluginDirectory, // 设置工作目录为 Rust 项目根目录
-			RedirectStandardOutput = true, // 重定向标准输出
-			RedirectStandardError = true, // 重定向标准错误
-			UseShellExecute = false, // 不使用 shell 执行，以便重定向输出
+			FileName = Command,
+			Arguments = Arguments,
+			WorkingDirectory = PluginDirectory,
+			RedirectStandardOutput = true,
+			RedirectStandardError = true,
+			UseShellExecute = false,
 			CreateNoWindow = true
 		};
 
@@ -49,32 +75,38 @@ public class Dwebble : ModuleRules
 		{
 			using var Proc = new Process();
 			Proc.StartInfo = ProcStartInfo;
-			Proc.Start(); // 启动进程
 
-			// 读取输出以避免死锁 (对于长时间运行的进程很重要)
-			var Output = Proc.StandardOutput.ReadToEnd();
-			var Error = Proc.StandardError.ReadToEnd();
+			Proc.OutputDataReceived += (sender, args) =>
+			{
+				if (!string.IsNullOrEmpty(args.Data))
+					Log.TraceInformationOnce($"[Cargo stdout] {args.Data}");
+			};
 
-			Proc.WaitForExit(); // 等待进程完成
+			Proc.ErrorDataReceived += (sender, args) =>
+			{
+				if (!string.IsNullOrEmpty(args.Data))
+					Log.TraceInformationOnce($"[Cargo stderr] {args.Data}");
+			};
 
-			// 检查 Cargo 命令的退出码
+			Proc.Start();
+
+			Proc.BeginOutputReadLine();
+			Proc.BeginErrorReadLine();
+
+			Proc.WaitForExit();
+
 			if (Proc.ExitCode != 0)
 			{
-				// 如果 Cargo 构建失败，抛出 BuildException，中断 Unreal 编译
-				throw new BuildException(
-					$"Rust cargo build failed with exit code {Proc.ExitCode}.\n" +
-					$"Output:\n{Output}\n" +
-					$"Error:\n{Error}"
-				);
+				throw new BuildException($"Rust cargo build failed with exit code {Proc.ExitCode}");
 			}
 
-			Log.TraceInformationOnce($"Rust cargo build completed successfully.\nOutput:\n{Output}");
+			Log.TraceInformationOnce("Rust cargo build completed successfully.");
 		}
 		catch (System.Exception Ex)
 		{
-			// 捕获执行进程时可能发生的异常
 			throw new BuildException($"Failed to run Rust cargo build: {Ex.Message}");
 		}
+
 
 		PrivateIncludePaths.AddRange(
 			new string[]
@@ -111,5 +143,45 @@ public class Dwebble : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 		);
+	}
+	
+
+	private string GetCargoTargetTriple()
+	{
+		if (Target.Platform == UnrealTargetPlatform.Win64)
+		{
+			return "x86_64-pc-windows-msvc";
+		}
+
+		if (Target.Platform == UnrealTargetPlatform.Linux)
+		{
+			return "x86_64-unknown-linux-musl";
+		}
+
+		throw new BuildException($"Unsupported Unreal platform for Rust cargo build: {Target.Platform}");
+	}
+
+	private string GetLibFileName()
+	{
+		if (Target.Platform == UnrealTargetPlatform.Win64)
+		{
+			if (Target.WindowsPlatform.Compiler.IsMSVC())
+			{
+				return "dwebble.lib";
+			}
+
+			if (Target.WindowsPlatform.Compiler.IsClang())
+			{
+				// return "libdwebble.a";
+				return "dwebble.lib";
+			}
+		}
+
+		if (Target.Platform == UnrealTargetPlatform.Linux)
+		{
+			return "dwebble.a"; // Linux uses .a for static libraries
+		}
+
+		throw new BuildException($"Unsupported Unreal platform for Rust cargo build: {Target.Platform}");
 	}
 }

@@ -2,12 +2,27 @@
 
 
 #include "DwebbleSubsystem.h"
-#include "dwebble_rs.h"
-// #include "dwebble/src/ffi.rs.h"
+
+// #include "dwebble/ffi/index.rs.h"
 
 void UDwebbleSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
     Super::Initialize(Collection);
+
+    // std::array<uint8_t, 16> Arr;
+    // FGuid NewGuid;
+    // const auto RustUuidStringPtr = dwebble_cxx::uuid::fill_uuid_v7_into_guid(Arr);
+    // FMemory::Memcpy(&NewGuid, Arr.data(), 16);
+    // UE_LOG(LogTemp, Warning, TEXT("UDwebbleSubsystem::Initialize with %s"),
+    //        *NewGuid.ToString(EGuidFormats::DigitsWithHyphensLower));
+    //
+    // if (RustUuidStringPtr != nullptr)
+    // {
+    //     const FString ResultString = FString(UTF8_TO_TCHAR(RustUuidStringPtr));
+    //     UE_LOG(LogTemp, Warning, TEXT("%s"), *ResultString);
+    //     dwebble_cxx::string::free_rust_string(RustUuidStringPtr);
+    // }
+
 
     // FGuid NewGuid;
     // void* GuidDataPtr = &NewGuid;
