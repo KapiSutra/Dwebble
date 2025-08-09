@@ -1,8 +1,10 @@
-﻿use std::ffi::{CString, c_char};
+﻿// use std::ffi::{c_char, CString};
 use uuid;
 
 #[unsafe(no_mangle)]
-pub extern "C" fn fill_uuid_v7_into_guid(buf: &mut [u8; 16]) -> *mut c_char {
+pub extern "C" fn fill_uuid_v7_into_guid(buf: &mut [u8; 16])
+// -> *mut c_char
+{
     let new_id = uuid::Uuid::now_v7();
 
     let uuid_bytes: uuid::Bytes = new_id.into_bytes();
@@ -16,5 +18,5 @@ pub extern "C" fn fill_uuid_v7_into_guid(buf: &mut [u8; 16]) -> *mut c_char {
     buf[8..12].copy_from_slice(&reverse_four_bytes(&uuid_bytes[8..12]));
     buf[12..16].copy_from_slice(&reverse_four_bytes(&uuid_bytes[12..16]));
 
-    CString::new(new_id.to_string()).unwrap().into_raw()
+    // CString::new(new_id.to_string()).unwrap().into_raw()
 }

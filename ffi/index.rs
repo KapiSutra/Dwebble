@@ -10,7 +10,7 @@ use crate::uuid::fill_uuid_v7_into_guid;
 mod ffi {
     extern "Rust" {
         #[namespace = "dwebble_cxx::uuid"]
-        fn fill_uuid_v7_into_guid(buf: &mut [u8; 16]) -> *mut c_char;
+        fn fill_uuid_v7_into_guid(buf: &mut [u8; 16]);
 
         #[namespace = "dwebble_cxx::string"]
         unsafe fn free_rust_string(s: *mut c_char);
