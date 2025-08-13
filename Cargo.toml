@@ -6,6 +6,8 @@ edition = "2024"
 [build-dependencies]
 #cbindgen = { version = "*", features = ["default"] }
 cxx-build = "*"
+glob = { version = "*" }
+
 
 [dependencies]
 cxx = { version = "*", features = ["std", "c++20"] }
@@ -20,6 +22,7 @@ anyhow = { version = "*" }
 port_check = { version = "*" }
 
 pkce-std = { version = "*" }
+glob = "*"
 
 [lib]
 crate-type = ["staticlib"]

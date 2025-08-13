@@ -1,5 +1,4 @@
-﻿// use std::ffi::{c_char, CString};
-use uuid;
+﻿use uuid;
 
 #[unsafe(no_mangle)]
 pub extern "C" fn fill_uuid_v7_into_guid(buf: &mut [u8; 16])
