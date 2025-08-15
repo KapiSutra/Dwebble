@@ -1,6 +1,7 @@
 ﻿use uuid;
 
 #[unsafe(no_mangle)]
+#[inline(never)]
 pub extern "C" fn fill_uuid_v7_into_guid(buf: &mut [u8; 16])
 // -> *mut c_char
 {

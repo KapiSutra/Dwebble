@@ -1,5 +1,6 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
+using System;
 using System.IO;
 using System.Diagnostics;
 using EpicGames.Core;
@@ -26,25 +27,15 @@ public class Dwebble : ModuleRules
 			PublicSystemLibraries.Add("msvcrt.lib");
 		}
 
-		var LibFileName = GetLibFileName();
+		#region cbindgen
 
-		PublicAdditionalLibraries.Add(
-			Path.Combine(PluginDirectory, @$"target\{CargoTarget}\release\{LibFileName}")
-		);
-
-		# region cbindgen
-		
 		// PublicIncludePaths.Add(
 		// 	Path.Combine(PluginDirectory, "cbindgen")
 		// );
 
-		# endregion
+		#endregion
 
-		# region cxx
-
-		// PublicAdditionalLibraries.Add(
-		// 	Path.Combine(PluginDirectory, @$"cxx\dwebble_cxx.lib")
-		// );
+		#region cxx
 
 		PublicIncludePaths.Add(
 			Path.Combine(PluginDirectory, @$"target\{CargoTarget}\cxxbridge")
@@ -53,60 +44,93 @@ public class Dwebble : ModuleRules
 
 		# endregion
 
-		const string Command = "cargo";
-		var Arguments = $"build --release --target {CargoTarget}";
+		var CargoProfile = GetCargoProfile();
 
-		Log.TraceInformationOnce("Dwebble Plugin: running Rust Cargo Build...");
+		#region cargo
 
-		Log.TraceInformationOnce($"{Command} {Arguments}");
+		// const string Command = "cargo";
+		// var Arguments = string.Equals(CargoProfile, "release", StringComparison.OrdinalIgnoreCase)
+		// 	? $"build --release --target {CargoTarget}"
+		// 	: $"build --target {CargoTarget}";
+		//
+		// Log.TraceInformationOnce("Dwebble Plugin: running Rust Cargo Build...");
+		//
+		// Log.TraceInformationOnce($"{Command} {Arguments}");
+		//
+		// var ProcStartInfo = new ProcessStartInfo()
+		// {
+		// 	FileName = Command,
+		// 	Arguments = Arguments,
+		// 	WorkingDirectory = PluginDirectory,
+		// 	RedirectStandardOutput = true,
+		// 	RedirectStandardError = true,
+		// 	UseShellExecute = false,
+		// 	CreateNoWindow = true
+		// };
+		//
+		// try
+		// {
+		// 	using var Proc = new Process();
+		// 	Proc.StartInfo = ProcStartInfo;
+		//
+		// 	Proc.OutputDataReceived += (sender, args) =>
+		// 	{
+		// 		if (!string.IsNullOrEmpty(args.Data))
+		// 			Log.TraceInformationOnce($"[Cargo stdout] {args.Data}");
+		// 	};
+		//
+		// 	Proc.ErrorDataReceived += (sender, args) =>
+		// 	{
+		// 		if (!string.IsNullOrEmpty(args.Data))
+		// 			Log.TraceInformationOnce($"[Cargo stderr] {args.Data}");
+		// 	};
+		//
+		// 	Proc.Start();
+		//
+		// 	Proc.BeginOutputReadLine();
+		// 	Proc.BeginErrorReadLine();
+		//
+		// 	Proc.WaitForExit();
+		//
+		// 	if (Proc.ExitCode != 0)
+		// 	{
+		// 		throw new BuildException($"Rust cargo build failed with exit code {Proc.ExitCode}");
+		// 	}
+		//
+		// 	Log.TraceInformationOnce("Rust cargo build completed successfully.");
+		// }
+		// catch (System.Exception Ex)
+		// {
+		// 	throw new BuildException($"Failed to run Rust cargo build: {Ex.Message}");
+		// }
 
-		var ProcStartInfo = new ProcessStartInfo()
-		{
-			FileName = Command,
-			Arguments = Arguments,
-			WorkingDirectory = PluginDirectory,
-			RedirectStandardOutput = true,
-			RedirectStandardError = true,
-			UseShellExecute = false,
-			CreateNoWindow = true
-		};
+		#endregion
 
-		try
-		{
-			using var Proc = new Process();
-			Proc.StartInfo = ProcStartInfo;
+		// PublicAdditionalLibraries.Add(
+		// 	Path.Combine(PluginDirectory, @$"target\{CargoTarget}\release\dwebble.dll.lib")
+		// );
 
-			Proc.OutputDataReceived += (sender, args) =>
-			{
-				if (!string.IsNullOrEmpty(args.Data))
-					Log.TraceInformationOnce($"[Cargo stdout] {args.Data}");
-			};
+		// PublicAdditionalLibraries.Add(
+		// 	Path.Combine(PluginDirectory, @$"cxx\dwebble_cxx.lib")
+		// );
 
-			Proc.ErrorDataReceived += (sender, args) =>
-			{
-				if (!string.IsNullOrEmpty(args.Data))
-					Log.TraceInformationOnce($"[Cargo stderr] {args.Data}");
-			};
+		// RuntimeDependencies.Add(
+		// 	Path.Combine(PluginDirectory, @$"target\{CargoTarget}\release\dwebble.dll")
+		// );
 
-			Proc.Start();
+		// RuntimeDependencies.Add(
+		// 	Path.Combine(PluginDirectory, @$"target\{CargoTarget}\release\dwebble.pdb")
+		// );
 
-			Proc.BeginOutputReadLine();
-			Proc.BeginErrorReadLine();
+		// PublicDelayLoadDLLs.Add(
+		// 	Path.Combine(PluginDirectory, @$"target\{CargoTarget}\release\dwebble.dll")
+		// );
 
-			Proc.WaitForExit();
+		var LibFileName = GetLibFileName();
 
-			if (Proc.ExitCode != 0)
-			{
-				throw new BuildException($"Rust cargo build failed with exit code {Proc.ExitCode}");
-			}
-
-			Log.TraceInformationOnce("Rust cargo build completed successfully.");
-		}
-		catch (System.Exception Ex)
-		{
-			throw new BuildException($"Failed to run Rust cargo build: {Ex.Message}");
-		}
-
+		PublicAdditionalLibraries.Add(
+			Path.Combine(PluginDirectory, @$"target\{CargoTarget}\{CargoProfile}\{LibFileName}")
+		);
 
 		PrivateIncludePaths.AddRange(
 			new string[]
@@ -144,7 +168,7 @@ public class Dwebble : ModuleRules
 			}
 		);
 	}
-	
+
 
 	private string GetCargoTargetTriple()
 	{
@@ -183,5 +207,10 @@ public class Dwebble : ModuleRules
 		}
 
 		throw new BuildException($"Unsupported Unreal platform for Rust cargo build: {Target.Platform}");
+	}
+
+	private string GetCargoProfile()
+	{
+		return Target.Configuration == UnrealTargetConfiguration.DebugGame ? "debug" : "release";
 	}
 }

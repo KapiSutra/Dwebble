@@ -32,9 +32,17 @@ path = "ffi/index.rs"
 #implicit_return = "deny"
 #needless_return = "allow"
 
-[profile.dev.build-override]
-debug = true
-
+[profile.dev]
+debug = 2
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = "unwind"
+codegen-units = 8
+opt-level = 0
 
 [profile.release]
 panic = "unwind"
+
+[target.x86_64-pc-windows-msvc]
+# rustflags = ["-C", "debuginfo=2"]

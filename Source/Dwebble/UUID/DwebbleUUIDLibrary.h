@@ -16,5 +16,5 @@ class DWEBBLE_API UDwebbleUUIDLibrary : public UBlueprintFunctionLibrary
 
 public:
     UFUNCTION(BlueprintPure)
-    static void Generate_UUID_V7(FGuid& Result);
+    static FORCENOINLINE void Generate_UUID_V7(FGuid& Result);
 };

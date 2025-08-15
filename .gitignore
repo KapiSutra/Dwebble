@@ -97,7 +97,7 @@ target/
 # Added by cargo
 
 /target
-.Cargo.lock
+/Cargo.lock
 /Bindgens
 
 /cxx
