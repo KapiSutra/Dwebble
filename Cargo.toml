@@ -12,17 +12,22 @@ cxx-build = "*"
 [dependencies]
 cxx = { version = "*", features = ["std", "c++20"] }
 tokio = { version = "*", features = ["rt-multi-thread"] }
-#tonic = { version = "*" }
 
 uuid = { version = "*", features = ["v7"] }
-#cxx-async = {version = "*"}
 
 anyhow = { version = "*" }
 
 port_check = { version = "*" }
 
 pkce-std = { version = "*" }
-glob = "*"
+
+axum = { version = "*" }
+openidconnect = { version = "*" }
+webbrowser = { version = "*" }
+
+cxx_async = { path = "./crates/cxx-async/cxx-async", package = "cxx-async" }
+serde = { version = "*" }
+
 
 [lib]
 crate-type = ["staticlib"]

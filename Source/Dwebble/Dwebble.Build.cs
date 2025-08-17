@@ -22,6 +22,7 @@ public class Dwebble : ModuleRules
 			PublicSystemLibraries.Add("userenv.lib");
 			PublicSystemLibraries.Add("ws2_32.lib");
 			PublicSystemLibraries.Add("msvcrt.lib");
+			PublicSystemLibraries.Add("Shlwapi.lib");
 		}
 
 		#region cbindgen
@@ -117,6 +118,9 @@ public class Dwebble : ModuleRules
 			Path.Combine(PluginDirectory, @$"target\{CargoTarget}\{CargoProfile}\{LibFileName}")
 		);
 
+		PublicIncludePaths.Add(
+			Path.Combine(PluginDirectory, $@"crates\cxx-async\cxx-async\include"));
+
 		// PublicDelayLoadDLLs.Add(
 		// 	Path.Combine(PluginDirectory, @$"target\{CargoTarget}\{CargoProfile}\dwebble.dll")
 		// );
@@ -145,6 +149,7 @@ public class Dwebble : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"UE5Coro"
 				// ... add private dependencies that you statically link with here ...	
 			}
 		);
