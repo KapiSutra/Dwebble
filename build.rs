@@ -15,10 +15,10 @@
     //     .expect("cbindgen error")
     //     .write_to_file(std::path::PathBuf::from(cbindgen_out_dir).join("dwebble_rs.h"));
 
-    let cxx_lib_dir = "cxx";
-    std::fs::remove_dir_all(cxx_lib_dir)
-        .and_then(|_| std::fs::create_dir(cxx_lib_dir))
-        .unwrap_or_default();
+//     let cxx_lib_dir = "cxx";
+//     std::fs::remove_dir_all(cxx_lib_dir)
+//         .and_then(|_| std::fs::create_dir(cxx_lib_dir))
+//         .unwrap_or_default();
 
     // let ffi_files = glob::glob("ffi/*.rs")
     //     .expect("Failed to read glob pattern")
@@ -28,7 +28,8 @@
     // cxx_build::bridges(ffi_files)
     cxx_build::bridge("ffi/index.rs")
         .std("c++20")
-        .out_dir(cxx_lib_dir)
+//         .out_dir(cxx_lib_dir)
+        .include("Source")
         .compile("dwebble_cxx");
 
     println!("cargo:rerun-if-changed=src");

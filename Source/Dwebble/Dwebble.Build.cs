@@ -1,9 +1,6 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
-using System;
 using System.IO;
-using System.Diagnostics;
-using EpicGames.Core;
 using UnrealBuildTool;
 
 public class Dwebble : ModuleRules
@@ -114,23 +111,15 @@ public class Dwebble : ModuleRules
 		// 	Path.Combine(PluginDirectory, @$"cxx\dwebble_cxx.lib")
 		// );
 
-		// RuntimeDependencies.Add(
-		// 	Path.Combine(PluginDirectory, @$"target\{CargoTarget}\release\dwebble.dll")
-		// );
-
-		// RuntimeDependencies.Add(
-		// 	Path.Combine(PluginDirectory, @$"target\{CargoTarget}\release\dwebble.pdb")
-		// );
-
-		// PublicDelayLoadDLLs.Add(
-		// 	Path.Combine(PluginDirectory, @$"target\{CargoTarget}\release\dwebble.dll")
-		// );
-
 		var LibFileName = GetLibFileName();
 
 		PublicAdditionalLibraries.Add(
 			Path.Combine(PluginDirectory, @$"target\{CargoTarget}\{CargoProfile}\{LibFileName}")
 		);
+
+		// PublicDelayLoadDLLs.Add(
+		// 	Path.Combine(PluginDirectory, @$"target\{CargoTarget}\{CargoProfile}\dwebble.dll")
+		// );
 
 		PrivateIncludePaths.AddRange(
 			new string[]

@@ -1,33 +1,28 @@
 ﻿{
-	"FileVersion": 3,
-	"Version": 1,
-	"VersionName": "1.0",
-	"FriendlyName": "Dwebble",
-	"Description": "",
-	"Category": "Other",
-	"CreatedBy": "tarnishablec",
-	"CreatedByURL": "https://github.com/tarnishablec",
-	"DocsURL": "",
-	"MarketplaceURL": "",
-	"CanContainContent": true,
-	"IsBetaVersion": true,
-	"IsExperimentalVersion": false,
-	"Installed": false,
-	"Modules": [
-		{
-			"Name": "Dwebble",
-			"Type": "Runtime",
-			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "DwebbleCxx",
-			"Type": "Program",
-			"LoadingPhase": "PreDefault"
-		}
-	],
-	"PreBuildSteps": {
-		"Win64": [
-			"$(PluginDir)/PreBuildSteps.bat"
-		]
-	}
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "Dwebble",
+  "Description": "",
+  "Category": "Other",
+  "CreatedBy": "tarnishablec",
+  "CreatedByURL": "https://github.com/tarnishablec",
+  "DocsURL": "",
+  "MarketplaceURL": "",
+  "CanContainContent": true,
+  "IsBetaVersion": true,
+  "IsExperimentalVersion": false,
+  "Installed": false,
+  "Modules": [
+    {
+      "Name": "Dwebble",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ],
+  "PreBuildSteps": {
+    "Win64": [
+      "$(PluginDir)/PreBuildSteps.bat"
+    ]
+  }
 }

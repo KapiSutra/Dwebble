@@ -1,6 +1,7 @@
 pub mod pkce;
 pub mod port;
 pub mod string;
+mod tokio;
 pub mod uuid;
 
 use crate::pkce::pkce_generate;
@@ -17,6 +18,11 @@ pub mod ffi {
         pub code_challenge_method: String, // "S256" / "plain"
         pub state: String,
         pub nonce: String,
+    }
+
+    unsafe extern "C++" {
+        include!("Dwebble/Tokio/ITokioRuntimeProvider.h");
+        type ITokioRuntimeProvider;
     }
 
     extern "Rust" {
