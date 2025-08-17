@@ -2,9 +2,8 @@
 use openidconnect::core::*;
 use openidconnect::{
     AuthenticationFlow, AuthorizationCode, ClientId, ClientSecret, CsrfToken, IssuerUrl, Nonce,
-    PkceCodeChallenge, RedirectUrl, Scope,
+    PkceCodeChallenge, RedirectUrl, Scope, reqwest,
 };
-use openidconnect::{OAuth2TokenResponse, reqwest};
 use std::i32;
 use std::sync::Arc;
 use tokio::sync::{Mutex, oneshot};
@@ -15,7 +14,7 @@ pub async fn oidc_access_token(
     client_secret: Option<String>,
     loopback_port: i32,
     loopback_route: String,
-) -> anyhow::Result<String> {
+) -> anyhow::Result<CoreTokenResponse> {
     let http_client = reqwest::ClientBuilder::new()
         .build()
         .expect("Client build error");
@@ -105,5 +104,5 @@ pub async fn oidc_access_token(
         .request_async(&http_client)
         .await?;
 
-    Ok(token_response.access_token().secret().to_string())
+    Ok(token_response)
 }

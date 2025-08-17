@@ -4,24 +4,18 @@
 #include "dwebble/ffi/index.rs.h"
 #include "Dwebble/Misc/DwebbleMiscLibrary.h"
 
-FVoidCoroutine UDwebbleOidcSubsystem::BrowserOidc(const FDwebbleOidcParams Params, FDwebbleOidcResult &Result, FLatentActionInfo LatentInfo)
+FVoidCoroutine UDwebbleOidcSubsystem::BrowserOidc(const FDwebbleOidcParams Params, FDwebbleOidcResult& Result,
+                                                  FLatentActionInfo LatentInfo)
 {
-	auto Ret = co_await dwebble_cxx::oidc::oidc_access_token(
-			dwebble_cxx::ToRustString(Params.Issuer),
-			dwebble_cxx::ToRustString(Params.ClientId),
-			dwebble_cxx::ToRustString(Params.ClientSecret.Get("")),
-			Params.LoopbackPort,
-			dwebble_cxx::ToRustString(Params.LoopbackRoute));
+	auto Ret = co_await dwebble_cxx::oidc::browser_oidc(
+		dwebble_cxx::ToRustString(Params.Issuer),
+		dwebble_cxx::ToRustString(Params.ClientId),
+		dwebble_cxx::ToRustString(Params.ClientSecret.Get("")),
+		Params.LoopbackPort,
+		dwebble_cxx::ToRustString(Params.LoopbackRoute));
 
-	if (Ret.empty())
-	{
-		Result.bSuccess = false;
-	}
-	else
-	{
-		Result.bSuccess = true;
-		Result.AccessToken = dwebble_cxx::ToFString(Ret);
-	}
+	Result.bSuccess = Ret.success;
+	Result.AccessToken = dwebble_cxx::ToFString(Ret.access_token);
 
 	co_return;
 }

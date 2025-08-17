@@ -1,6 +1,6 @@
 ﻿use pkce_std::{Code, Count, encoding, generate};
 
-pub fn pkce_generate() -> crate::ffi::Pkce {
+pub fn pkce_generate() -> crate::ffi::FPkce {
     let code = Code::generate_default();
 
     let (verifier, challenge) = code.into_pair();
@@ -10,7 +10,7 @@ pub fn pkce_generate() -> crate::ffi::Pkce {
     let state = encoding::encode(generate::bytes(cnt));
     let nonce = encoding::encode(generate::bytes(cnt));
 
-    crate::ffi::Pkce {
+    crate::ffi::FPkce {
         code_verifier: verifier.to_string(),
         code_challenge: challenge.to_string(),
         code_challenge_method: challenge.method().static_str().to_string(),
