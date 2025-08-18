@@ -1,14 +1,16 @@
-﻿use axum::{Router, extract::Query, routing::get};
+﻿use crate::{ffi::FOidcResult, tokio_rt};
+use axum::{Router, extract::Query, routing::get};
 use openidconnect::core::*;
 use openidconnect::{
     AuthenticationFlow, AuthorizationCode, ClientId, ClientSecret, CsrfToken, IssuerUrl, Nonce,
-    PkceCodeChallenge, RedirectUrl, Scope, reqwest,
+    OAuth2TokenResponse, PkceCodeChallenge, RedirectUrl, Scope, reqwest,
 };
 use std::i32;
+use std::pin::Pin;
 use std::sync::Arc;
 use tokio::sync::{Mutex, oneshot};
 
-pub async fn oidc_access_token(
+pub async fn oidc_token(
     issuer: String,
     client_id: String,
     client_secret: Option<String>,
@@ -104,4 +106,59 @@ pub async fn oidc_access_token(
         .await?;
 
     Ok(token_response)
+}
+
+#[cxx_async::bridge]
+unsafe impl Future for RustFutureOidcResult {
+    type Output = FOidcResult;
+}
+
+pub fn browser_oidc(
+    issuer: String,
+    client_id: String,
+    client_secret: String,
+    loopback_port: i32,
+    loopback_route: String,
+) -> RustFutureOidcResult {
+    RustFutureOidcResult::infallible(async move {
+        let rt = tokio_rt::get_or_init_runtime();
+        rt.spawn(async move {
+            let result = oidc_token(
+                issuer,
+                client_id,
+                // Only provide the secret if the string is not empty.
+                (!client_secret.trim().is_empty()).then_some(client_secret),
+                loopback_port,
+                loopback_route,
+            )
+            .await;
+
+            match result {
+                Ok(token_response) => FOidcResult {
+                    success: true,
+                    access_token: token_response.access_token().secret().to_string(),
+                    refresh_token: token_response
+                        .refresh_token()
+                        .map_or(String::new(), |rt| rt.secret().to_string()),
+                    error_message: String::new(),
+                },
+                Err(e) => FOidcResult {
+                    success: false,
+                    access_token: String::new(),
+                    refresh_token: String::new(),
+                    error_message: e.to_string(),
+                },
+            }
+        })
+        .await
+        .unwrap_or_else(|join_error| {
+            // This block is executed only if the spawned task panicked.
+            FOidcResult {
+                success: false,
+                access_token: String::new(),
+                refresh_token: String::new(),
+                error_message: format!("Task panicked: {}", join_error),
+            }
+        })
+    })
 }

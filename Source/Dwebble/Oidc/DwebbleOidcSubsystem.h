@@ -16,6 +16,11 @@ class DWEBBLE_API UDwebbleOidcSubsystem : public ULocalPlayerSubsystem
 {
 	GENERATED_BODY()
 
+protected:
+	TOptional<FString> RefreshToken;
+
+public:
 	UFUNCTION(BlueprintCallable, Category = "Tauros | Oidc", meta = (Latent, LatentInfo = LatentInfo))
-	FVoidCoroutine BrowserOidc(const FDwebbleOidcParams Params, FDwebbleOidcResult &Result, FLatentActionInfo LatentInfo);
+	FVoidCoroutine BrowserOidc(const FDwebbleOidcParams Params, FDwebbleOidcResult& Result,
+	                           FLatentActionInfo LatentInfo);
 };

@@ -33,9 +33,12 @@ struct DWEBBLE_API FDwebbleOidcResult
 {
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 	bool bSuccess;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadOnly)
 	FString AccessToken;
+
+	UPROPERTY(BlueprintReadOnly)
+	FString ErrorMessage;
 };
