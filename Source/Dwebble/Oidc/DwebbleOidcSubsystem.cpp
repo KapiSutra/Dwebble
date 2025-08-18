@@ -8,15 +8,15 @@ FVoidCoroutine UDwebbleOidcSubsystem::BrowserOidc(const FDwebbleOidcParams Param
                                                   FLatentActionInfo LatentInfo)
 {
 	auto [success, access_token, refresh_token, error_message] = co_await dwebble_cxx::oidc::browser_oidc(
-		dwebble_cxx::ToRustString(Params.Issuer),
-		dwebble_cxx::ToRustString(Params.ClientId),
-		dwebble_cxx::ToRustString(Params.ClientSecret.Get("")),
+		dwebble_cxx::string::ToRustString(Params.Issuer),
+		dwebble_cxx::string::ToRustString(Params.ClientId),
+		dwebble_cxx::string::ToRustString(Params.ClientSecret.Get("")),
 		Params.LoopbackPort,
-		dwebble_cxx::ToRustString(Params.LoopbackRoute));
+		dwebble_cxx::string::ToRustString(Params.LoopbackRoute));
 
 	Result.bSuccess = success;
-	Result.AccessToken = dwebble_cxx::ToFString(access_token);
-	Result.ErrorMessage = dwebble_cxx::ToFString(error_message);
-	RefreshToken.Emplace(dwebble_cxx::ToFString(refresh_token));
+	Result.AccessToken = dwebble_cxx::string::ToFString(access_token);
+	Result.ErrorMessage = dwebble_cxx::string::ToFString(error_message);
+	RefreshToken.Emplace(dwebble_cxx::string::ToFString(refresh_token));
 	co_return;
 }

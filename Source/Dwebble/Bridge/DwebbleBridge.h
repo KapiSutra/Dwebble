@@ -1,12 +1,15 @@
+// ReSharper disable CppUE4CodingStandardNamingViolationWarning
 #pragma once
 
 #include "rust/cxx.h"
 #include "rust/cxx_async.h"
 
-// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-namespace dwebble_cxx::oidc
+namespace dwebble_cxx
 {
-	struct FOidcResult;
+	namespace oidc
+	{
+		struct FOidcResult;
+	}
 }
 
 CXXASYNC_DEFINE_FUTURE(rust::String, RustFutureString);

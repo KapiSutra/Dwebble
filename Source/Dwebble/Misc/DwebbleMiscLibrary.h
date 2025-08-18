@@ -1,5 +1,6 @@
 // Copyright 2019-Present tarnishablec. All Rights Reserved.
 
+// ReSharper disable CppUE4CodingStandardNamingViolationWarning
 #pragma once
 
 #include "CoreMinimal.h"
@@ -21,15 +22,13 @@ public:
 };
 
 
-// ReSharper disable once CppUE4CodingStandardNamingViolationWarning
-namespace dwebble_cxx
+namespace dwebble_cxx::string
 {
 	inline rust::String ToRustString(const FString& In)
 	{
-		const FTCHARToUTF8 Conv(*In); // 生命周期到本作用域末
-		// 复制到 std::string，避免使用临时指针悬空
+		const FTCHARToUTF8 Conv(*In);
 		const std::string Utf8(Conv.Get(), Conv.Length());
-		return rust::String(Utf8); // 或：rust::String(Utf8.c_str())
+		return rust::String(Utf8);
 	}
 
 	inline FString ToFString(rust::String& In)
