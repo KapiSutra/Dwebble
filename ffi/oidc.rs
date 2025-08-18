@@ -47,7 +47,6 @@ pub async fn oidc_access_token(
     webbrowser::open(auth_url.as_str())?;
 
     #[derive(serde::Deserialize)]
-    #[allow(dead_code)]
     struct Params {
         code: String,
         state: String,
