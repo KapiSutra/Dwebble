@@ -26,13 +26,17 @@ namespace dwebble_cxx::string
 {
 	inline rust::String ToRustString(const FString& In)
 	{
-		const FTCHARToUTF8 Conv(*In);
-		const std::string Utf8(Conv.Get(), Conv.Length());
-		return rust::String(Utf8);
+		const auto Utf8 = StringCast<UTF8CHAR>(*In);
+		return rust::String(std::string(
+			reinterpret_cast<const char*>(Utf8.Get()),
+			Utf8.Length()));
 	}
 
-	inline FString ToFString(rust::String& In)
+	inline FString ToFString(const rust::String& In)
 	{
-		return UTF8_TO_TCHAR(In.c_str());
+		auto Copy = In;
+		const UTF8CHAR* Src = reinterpret_cast<const UTF8CHAR*>(Copy.c_str());
+		const auto Conv = StringCast<TCHAR>(Src);
+		return FString(Conv.Get());
 	}
 }

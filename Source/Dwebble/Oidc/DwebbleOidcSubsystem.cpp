@@ -4,10 +4,10 @@
 #include "dwebble/ffi/index.rs.h"
 #include "Dwebble/Misc/DwebbleMiscLibrary.h"
 
-FVoidCoroutine UDwebbleOidcSubsystem::BrowserOidc(const FDwebbleOidcParams Params, FDwebbleOidcResult& Result,
-                                                  FLatentActionInfo LatentInfo)
+FVoidCoroutine UDwebbleOidcSubsystem::K2_BrowserOidc(const FDwebbleOidcParams Params, FDwebbleOidcResult& Result,
+                                                     FLatentActionInfo LatentInfo)
 {
-	auto [success, access_token, refresh_token, error_message] = co_await dwebble_cxx::oidc::browser_oidc(
+	const auto [success, access_token, refresh_token, error_message] = co_await dwebble_cxx::oidc::browser_oidc(
 		dwebble_cxx::string::ToRustString(Params.Issuer),
 		dwebble_cxx::string::ToRustString(Params.ClientId),
 		dwebble_cxx::string::ToRustString(Params.ClientSecret.Get("")),

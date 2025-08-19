@@ -20,7 +20,11 @@ protected:
 	TOptional<FString> RefreshToken;
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "Tauros | Oidc", meta = (Latent, LatentInfo = LatentInfo))
-	FVoidCoroutine BrowserOidc(const FDwebbleOidcParams Params, FDwebbleOidcResult& Result,
-	                           FLatentActionInfo LatentInfo);
+	UFUNCTION(BlueprintCallable, Category = "Dwebble | Oidc",
+		meta = (Latent, LatentInfo = LatentInfo),
+		DisplayName="Browser Oidc"
+	)
+	FVoidCoroutine K2_BrowserOidc(const FDwebbleOidcParams Params,
+	                              FDwebbleOidcResult& Result,
+	                              FLatentActionInfo LatentInfo);
 };

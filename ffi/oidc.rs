@@ -11,11 +11,11 @@ use std::sync::Arc;
 use tokio::sync::{Mutex, oneshot};
 
 pub async fn oidc_token(
-    issuer: String,
-    client_id: String,
-    client_secret: Option<String>,
+    issuer: &str,
+    client_id: &str,
+    client_secret: Option<&str>,
     loopback_port: i32,
-    loopback_route: String,
+    loopback_route: &str,
 ) -> anyhow::Result<CoreTokenResponse> {
     let http_client = reqwest::ClientBuilder::new()
         .build()
@@ -27,8 +27,8 @@ pub async fn oidc_token(
 
     let client = CoreClient::from_provider_metadata(
         provider,
-        ClientId::new(client_id.into()),
-        client_secret.map(ClientSecret::new),
+        ClientId::new(client_id.to_string()),
+        client_secret.map(|s| ClientSecret::new(s.to_string())),
     )
     .set_redirect_uri(RedirectUrl::new(format!(
         "http://127.0.0.1:{}{}",
@@ -124,12 +124,12 @@ pub fn browser_oidc(
         let rt = tokio_rt::get_or_init_runtime();
         rt.spawn(async move {
             let result = oidc_token(
-                issuer,
-                client_id,
+                issuer.as_str(),
+                client_id.as_str(),
                 // Only provide the secret if the string is not empty.
-                (!client_secret.trim().is_empty()).then_some(client_secret),
+                (!client_secret.trim().is_empty()).then_some(client_secret.as_str()),
                 loopback_port,
-                loopback_route,
+                loopback_route.as_str(),
             )
             .await;
 
