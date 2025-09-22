@@ -21,7 +21,7 @@ struct DWEBBLE_API FDwebbleOidcParams
 	TOptional<FString> ClientSecret;
 
 	UPROPERTY(BlueprintReadWrite)
-	int32 LoopbackPort;
+	int32 LoopbackPort = 0;
 
 	UPROPERTY(BlueprintReadWrite)
 	FString LoopbackRoute;
@@ -34,7 +34,7 @@ struct DWEBBLE_API FDwebbleOidcResult
 	GENERATED_BODY()
 
 	UPROPERTY(BlueprintReadOnly)
-	bool bSuccess;
+	bool bSuccess = false;
 
 	UPROPERTY(BlueprintReadOnly)
 	FString AccessToken;
