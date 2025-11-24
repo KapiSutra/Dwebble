@@ -1,2 +1,5 @@
 ﻿[env]
 CXXFLAGS_x86_64-pc-windows-msvc = "/std:c++20 /await:strict /EHsc /permissive-"
+
+[build]
+rustflags = ["--cap-lints=allow"]

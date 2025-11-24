@@ -26,6 +26,7 @@ openidconnect = { version = "*" }
 webbrowser = { version = "*" }
 
 cxx_async = { path = "./crates/cxx-async/cxx-async", package = "cxx-async" }
+
 serde = { version = "*" }
 
 
@@ -38,7 +39,7 @@ path = "ffi/index.rs"
 #needless_return = "allow"
 
 [profile.dev]
-debug = 2
+debug = 1
 debug-assertions = true
 overflow-checks = true
 lto = false
@@ -47,7 +48,7 @@ codegen-units = 8
 opt-level = 0
 
 [profile.release]
+debug = 1
 panic = "unwind"
 
 [target.x86_64-pc-windows-msvc]
-# rustflags = ["-C", "debuginfo=2"]
